@@ -1,23 +1,25 @@
 --Exercise 3 Task 1
 -- List all Employees from the Employees table and who they report to. No Excel required. (5 Marks)
 
-SELECT TitleOfCourtesy + ' ' + FirstName + ' ' + LastName + ', ' + Title 
+/*SELECT TitleOfCourtesy + ' ' + FirstName + ' ' + LastName + ', ' + Title 
 AS "Employees", ReportsTo  
-FROM Employees
+FROM Employees*/
 
 
---Exercise 3 Task 2 -- UNABLE TO COMPLETE, consistent error "Ambiguous Column Name" with UnitPrice despite the correct table referrenced in OrderDetails Table
+--Exercise 3 Task 2 
 -- List all Suppliers with total sales over $10,000 in the Order Details table.
 -- Include the Company Name from the Suppliers Table and present as a bar chart as below: (5 Marks)
 
-SELECT s.CompanyName, (SUM(UnitPrice) * SUM(Quantity)) AS "Total Sales Amount" 
-FROM [Order Details] od
-INNER JOIN Orders o  
-ON od.OrderID = o.OrderID
-INNER JOIN Products p
-ON od.ProductID = p.ProductID
-INNER JOIN Suppliers s
-ON p.SupplierID = s.SupplierID
+
+SELECT s.CompanyName AS "Company Name", SUM(Sales) AS "Total Sales" FROM Suppliers s
+INNER JOIN Products p 
+ON s.SupplierID = p.SupplierID
+INNER JOIN (SELECT ProductID, UnitPrice*Quantity AS "Sales" FROM [Order Details])o 
+ON p.ProductID = o.ProductID
+GROUP BY s.CompanyName
+HAVING SUM(Sales) > 10000
+ORDER BY SUM(Sales)
+
 
 
 
